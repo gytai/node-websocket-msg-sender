@@ -15,7 +15,7 @@
     <div class="wrapper">
         <div style="width:850px;">
             <h3>介绍:</h3>
-            <b>这是一个消息推送系统，基于<a rel="nofollow" href="https://socket.io/">Socket.IO</a>开发。<br><br><br>
+            <b>这是一个消息推送系统，基于<a rel="nofollow" href="https://socket.io/">Socket.IO</a>开发。<br><br><br></b>
             <h3>支持以下特性：</h3>
             <ul>
                 <li>多浏览器支持</li>
@@ -50,7 +50,7 @@
   <script src="/socket.io/socket.io.js"></script>
 
   <script>
-      var socket = io.connect('http://localhost:3000');
+      var socket = io.connect('http://'+document.domain+':3000');
       socket.emit('login', new Date().getTime());
 
       // 后端推送来消息时
