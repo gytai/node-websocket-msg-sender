@@ -5,7 +5,7 @@ var msgType = require('../io/messageTpye').messageType;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Node-Msg-Sender' });
 });
 
 router.get('/sendMsg', function(req, res, next) {

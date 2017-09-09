@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+.gitignore
+.idea/inspectionProfiles/
+.idea/modules.xml
+.idea/node-msg-sender.iml
+.idea/workspace.xml
+node_modules/
