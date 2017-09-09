@@ -1,5 +1,5 @@
 # node-msg-sender
-基于Nodejs的消息转发系统  message pusher written in nodejs based on socket.io
+基于Nodejs websocket socket.io的消息转发系统  message pusher written in nodejs based on socket.io
 ==============
 
 消息实时推送，支持在线用户数实时统计。基于[Socket.IO](https://socket.io/)开发，使用websocket推送数据，当浏览器不支持websocket时自动切换comet推送数据。
