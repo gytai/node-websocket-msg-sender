@@ -18,7 +18,9 @@
 http://112.74.81.224:3000/
 
 可以通过url：http://112.74.81.224:3000/sendMsg/?type=private&uid=1504936989000&content=消息内容 向当前用户发送消息
+
 可以通过url：http://112.74.81.224:3000/sendMsg/?type=public&content=消息内容 向所有在线用户推送消息
+
 uid为接收消息的uid，如果不传递则向所有人推送消息  
 content 为消息内容
 
@@ -93,6 +95,7 @@ Nodejs后端调用api向任意用户推送数据
 Http 发送数据，可以配置跨站发送（需要设置跨域放行）。例如安卓或者IOS等其他客户端也可以方便的发送消息。
 ====
 可以通过url：http://localhost:3000/sendMsg/?type=private&uid=1504936989000&content=消息内容 向当前用户发送消息
+
 可以通过url：http://localhost:3000/sendMsg/?type=public&content=消息内容 向所有在线用户推送消息
 
 
