@@ -1,4 +1,3 @@
-# node-msg-sender
 基于Nodejs websocket socket.io的消息转发系统  message pusher written in nodejs based on socket.io
 ==============
 
