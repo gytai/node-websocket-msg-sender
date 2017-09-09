@@ -14,11 +14,15 @@ ioSvc.getInstance =function () {
 
 //服务器给所有客户端广播消息
 ioSvc.serverBroadcastMsg = function (data) {
+    console.log('发送广播消息');
+    console.log(data);
     this.io.sockets.emit('message',data);
 };
 
 //服务端给指定用户发消息
 ioSvc.serverToPrivateMsg = function (uid,data) {
+    console.log('发送私人消息');
+    console.log(data);
     redis.get(uid,function (err,sid) {
         if(err){
             console.error(err);
