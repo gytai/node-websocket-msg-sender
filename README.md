@@ -28,7 +28,7 @@ content 为消息内容
 
 下载安装
 ======
-1、git clone https://github.com/gytai/node-msg-sender.git
+1、git clone https://github.com/gytai/node-websocket-msg-sender.git
 
 2、npm install
 
