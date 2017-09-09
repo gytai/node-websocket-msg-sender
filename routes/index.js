@@ -24,7 +24,7 @@ router.get('/sendMsg', function(req, res, next) {
             ioSvc.serverToPrivateMsg(uid,content);
             break;
     }
-    return res.send({code:200,msg:'发生成功'});
+    return res.send({code:200,msg:'发送成功'});
 
 });
 
