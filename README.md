@@ -15,9 +15,10 @@
 线上demo  
 ======
 
-可以通过url：http://localhost:3000/sendMsg/?type=private&uid=1504936989000&content=消息内容 向当前用户发送消息
-可以通过url：http://localhost:3000/sendMsg/?type=public&content=消息内容 向所有在线用户推送消息
+http://112.74.81.224:3000/
 
+可以通过url：http://112.74.81.224:3000/sendMsg/?type=private&uid=1504936989000&content=消息内容 向当前用户发送消息
+可以通过url：http://112.74.81.224:3000/sendMsg/?type=public&content=消息内容 向所有在线用户推送消息
 uid为接收消息的uid，如果不传递则向所有人推送消息  
 content 为消息内容
 
@@ -28,6 +29,10 @@ content 为消息内容
 1、git clone https://github.com/gytai/node-msg-sender.git
 
 2、npm install
+
+3、apt-get install redis-server
+
+4、redis-server
 
 后端服务启动停止,先安装PM2(Advanced Node.js process manager，http://pm2.keymetrics.io/)
 ======
