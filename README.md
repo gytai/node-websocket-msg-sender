@@ -10,7 +10,7 @@
 
 效果截图
 ======
-![node-msg-sender-demo](http://www.workerman.net/img/web-msg-sender-demo.png)
+![node-msg-sender-demo](http://112.74.81.224:3000/images/demo.png)
  
 线上demo  
 ======
