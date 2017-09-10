@@ -62,7 +62,7 @@
       // 后端推送来在线数据时
       socket.on('update_online_count', function(data){
           console.log(data);
-          $('#online_box').text('当前在线客户端数:&nbsp;'+data.online_count);
+          $('#online_box').html('当前在线客户端数:&nbsp;'+data.online_count);
       });
 
   </script>
