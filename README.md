@@ -1,5 +1,4 @@
-# node-msg-sender
-基于Nodejs的消息转发系统  message pusher written in nodejs based on socket.io
+基于Nodejs websocket socket.io的消息转发系统  message pusher written in nodejs based on socket.io
 ==============
 
 消息实时推送，支持在线用户数实时统计。基于[Socket.IO](https://socket.io/)开发，使用websocket推送数据，当浏览器不支持websocket时自动切换comet推送数据。
@@ -15,8 +14,11 @@
 线上demo  
 ======
 
-可以通过url：http://localhost:3000/sendMsg/?type=private&uid=1504936989000&content=消息内容 向当前用户发送消息
-可以通过url：http://localhost:3000/sendMsg/?type=public&content=消息内容 向所有在线用户推送消息
+http://112.74.81.224:3000/
+
+可以通过url：http://112.74.81.224:3000/sendMsg/?type=private&uid=1504936989000&content=消息内容 向当前用户发送消息
+
+可以通过url：http://112.74.81.224:3000/sendMsg/?type=public&content=消息内容 向所有在线用户推送消息
 
 uid为接收消息的uid，如果不传递则向所有人推送消息  
 content 为消息内容
@@ -25,9 +27,13 @@ content 为消息内容
 
 下载安装
 ======
-1、git clone https://github.com/gytai/node-msg-sender.git
+1、git clone https://github.com/gytai/node-websocket-msg-sender.git
 
 2、npm install
+
+3、apt-get install redis-server
+
+4、redis-server
 
 后端服务启动停止,先安装PM2(Advanced Node.js process manager，http://pm2.keymetrics.io/)
 ======
@@ -88,6 +94,7 @@ Nodejs后端调用api向任意用户推送数据
 Http 发送数据，可以配置跨站发送（需要设置跨域放行）。例如安卓或者IOS等其他客户端也可以方便的发送消息。
 ====
 可以通过url：http://localhost:3000/sendMsg/?type=private&uid=1504936989000&content=消息内容 向当前用户发送消息
+
 可以通过url：http://localhost:3000/sendMsg/?type=public&content=消息内容 向所有在线用户推送消息
 
 
