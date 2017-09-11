@@ -51,7 +51,10 @@
 
   <script>
       var socket = io.connect('http://'+document.domain+':3000');
-      socket.emit('login', new Date().getTime());
+      socket.on('connect', function () {
+          console.log('连接成功...');
+          socket.emit('login', new Date().getTime());
+      });
 
       // 后端推送来消息时
       socket.on('message', function(msg){
@@ -62,7 +65,7 @@
       // 后端推送来在线数据时
       socket.on('update_online_count', function(data){
           console.log(data);
-          $('#online_box').text('当前在线客户端数:&nbsp;'+data.online_count);
+          $('#online_box').html('当前在线客户端数:&nbsp;'+data.online_count);
       });
 
   </script>

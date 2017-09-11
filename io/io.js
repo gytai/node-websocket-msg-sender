@@ -70,7 +70,7 @@ function ioServer(io) {
         //监听客户端发送的信息,实现消息转发到各个其他客户端
         socket.on('message',function(msg){
             if(msg.type == msgType.messageType.public){
-                socket.broadcast.emit("message",{data:msg.content});
+                socket.broadcast.emit("message",msg.content);
             }else if(msg.type == msgType.messageType.private){
                 var uid = msg.uid;
                 redis.get(uid,function (err,sid) {
@@ -79,7 +79,7 @@ function ioServer(io) {
                    }
                    if(sid){
                        //给指定的客户端发送消息
-                       io.sockets.socket(sid).emit('message', {data:msg.content});
+                       io.sockets.socket(sid).emit('message', msg.content);
                    }
                 });
             }
