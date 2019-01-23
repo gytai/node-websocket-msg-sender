@@ -12,7 +12,64 @@ client.on("error", function (err) {
 
 client.on('connect', function(){
     console.log('Redis连接成功.');
+    //切换到db(1)
+		client.select(1, function(err){
+				if (err) {
+						console.log("切换数据库db(1)失败", err);
+						return;
+				}
+				console.log("切换数据库db(1)成功");
+		});
 });
+
+/**
+ * 切换数据库
+ * @param dbId 数据库id
+ */
+redisSvc.select = function(dbId, callback){
+
+		client.select(dbId, function(err,result){
+
+				if (err) {
+						console.log(err);
+						callback(err,null);
+						return;
+				}
+
+				callback(null,result);
+		});
+};
+
+redisSvc.fetchDbRecordCount = function(dbId, callback){
+
+	client.select(dbId, function(err,result){
+
+		if (err) {
+			console.log(err);
+			callback(err,null);
+			return;
+		}
+
+		client.dbsize(function (err, result) {
+			callback(null,result);
+		});
+
+
+	});
+};
+
+redisSvc.isSpecialKeyExists = function(key, callback){
+
+	client.exists(key, function(err,result){
+
+		if (err) {
+			console.log(err);
+			callback(err,null);
+			return;
+		}
+		callback(null,result);
+	});
+};
 
 /**
  * 添加string类型的数据
