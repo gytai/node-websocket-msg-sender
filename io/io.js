@@ -37,6 +37,12 @@ function ioServer(io) {
 						}
 						_self.updateOnlieCount(true);
 					});
+				} else {
+					redis.set(uid, socket.id, null, function (err, ret) {
+						if (err) {
+							console.error(err);
+						}
+					});
 				}
 			});
 
