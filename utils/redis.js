@@ -1,73 +1,74 @@
 var redisSvc = {};
 var redis = require("redis");
 
-if(!client){
-    var client = redis.createClient();
+if (!client) {
+	console.log("没有redis连接，重新创建redis连接");
+	var client = redis.createClient();
+	//切换到db(1)
+	client.select(1, function (err) {
+		if (err) {
+			console.log("切换数据库db(1)失败", err);
+			return;
+		}
+		console.log("切换数据库db(1)成功");
+	});
 }
 
 client.on("error", function (err) {
-    console.log("Redis Error :" , err);
-    client = null;
+	console.log("Redis Error :", err);
+	client = null;
 });
 
-client.on('connect', function(){
-    console.log('Redis连接成功.');
-    //切换到db(1)
-		client.select(1, function(err){
-				if (err) {
-						console.log("切换数据库db(1)失败", err);
-						return;
-				}
-				console.log("切换数据库db(1)成功");
-		});
+client.on('connect', function () {
+	console.log('Redis连接成功.');
 });
 
 /**
  * 切换数据库
  * @param dbId 数据库id
  */
-redisSvc.select = function(dbId, callback){
+redisSvc.select = function (dbId, callback) {
 
-		client.select(dbId, function(err,result){
-
-				if (err) {
-						console.log(err);
-						callback(err,null);
-						return;
-				}
-
-				callback(null,result);
-		});
-};
-
-redisSvc.fetchDbRecordCount = function(dbId, callback){
-
-	client.select(dbId, function(err,result){
+	client.select(dbId, function (err, result) {
 
 		if (err) {
 			console.log(err);
-			callback(err,null);
+			callback(err, null);
+			return;
+		}
+
+		callback(null, result);
+	});
+};
+
+redisSvc.fetchDbRecordCount = function (dbId, callback) {
+
+	client.select(dbId, function (err, result) {
+
+		if (err) {
+			console.log(err);
+			callback(err, null);
 			return;
 		}
 
 		client.dbsize(function (err, result) {
-			callback(null,result);
+			callback(null, result);
 		});
 
 
 	});
 };
 
-redisSvc.isSpecialKeyExists = function(key, callback){
+redisSvc.isSpecialKeyExists = function (key, callback) {
 
-	client.exists(key, function(err,result){
+	client.exists(key, function (err, result) {
 
 		if (err) {
 			console.log(err);
-			callback(err,null);
+			callback(err, null);
 			return;
 		}
-		callback(null,result);
+		callback(null, result);
 	});
 };
 
@@ -78,22 +79,22 @@ redisSvc.isSpecialKeyExists = function(key, callback){
  * @params expire (过期时间,单位秒;可为空，为空表示不过期)
  * @param callBack(err,result)
  */
-redisSvc.set = function(key, value, expire, callback){
+redisSvc.set = function (key, value, expire, callback) {
 
-    client.set(key, value, function(err, result){
+	client.set(key, value, function (err, result) {
 
-        if (err) {
-            console.log(err);
-            callback(err,null);
-            return;
-        }
+		if (err) {
+			console.log(err);
+			callback(err, null);
+			return;
+		}
 
-        if (!isNaN(expire) && expire > 0) {
-            client.expire(key, parseInt(expire));
-        }
+		if (!isNaN(expire) && expire > 0) {
+			client.expire(key, parseInt(expire));
+		}
 
-        callback(null,result)
-    })
+		callback(null, result)
+	})
 };
 
 /**
@@ -101,18 +102,18 @@ redisSvc.set = function(key, value, expire, callback){
  * @param key 键
  * @param callBack(err,result)
  */
-redisSvc.get = function(key, callback){
+redisSvc.get = function (key, callback) {
 
-    client.get(key, function(err,result){
+	client.get(key, function (err, result) {
 
-        if (err) {
-            console.log(err);
-            callback(err,null);
-            return;
-        }
+		if (err) {
+			console.log(err);
+			callback(err, null);
+			return;
+		}
 
-        callback(null,result);
-    });
+		callback(null, result);
+	});
 };
 
 /*
@@ -120,18 +121,18 @@ redisSvc.get = function(key, callback){
  * @param key 键
  * @param callBack(err,result)
 */
-redisSvc.del = function(key, callback){
+redisSvc.del = function (key, callback) {
 
-    client.del(key, function(err,result){
+	client.del(key, function (err, result) {
 
-        if (err) {
-            console.log(err);
-            callback(err,null);
-            return;
-        }
+		if (err) {
+			console.log(err);
+			callback(err, null);
+			return;
+		}
 
-        callback(null,result);
-    });
+		callback(null, result);
+	});
 };
 
 
