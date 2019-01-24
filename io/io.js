@@ -56,19 +56,18 @@ function ioServer(io) {
 
 		//退出断开连接事件
 		socket.on('logout_disconnect', function () {
-			console.log(socket.id + " 与服务器断开");
+			console.log("socket: " + socket.id + " 与服务器断开");
 			redis.get(socket.id, function (err, val) {
 				if (err) {
 					console.error(err);
 				}
-
-				console.log("User: " + val + " 与服务器断开");
 				redis.del(socket.id, function (err, ret) {
 					if (err) {
 						console.error(err);
 					}
 				});
 				if(val) {
+					console.log("User: " + val + " 与服务器断开");
 					redis.del(val, function (err, ret) {
 						if (err) {
 							console.error(err);
@@ -81,23 +80,25 @@ function ioServer(io) {
 
 		//断开事件
 		socket.on('disconnect', function () {
-			console.log(socket.id + " 与服务器断开");
+			console.log("socket: " + socket.id + " 与服务器断开");
 			redis.get(socket.id, function (err, val) {
 				if (err) {
 					console.error(err);
 				}
-				console.log("User: " + val + " 与服务器断开");
 				redis.del(socket.id, function (err, ret) {
 					if (err) {
 						console.error(err);
 					}
 				});
-				redis.del(val, function (err, ret) {
-					if (err) {
-						console.error(err);
-					}
-					_self.updateOnlieCount(false);
-				});
+				if(val) {
+					console.log("User: " + val + " 与服务器断开");
+					redis.del(val, function (err, ret) {
+						if (err) {
+							console.error(err);
+						}
+						_self.updateOnlieCount(false);
+					});
+				}
 			});
 		});
 
