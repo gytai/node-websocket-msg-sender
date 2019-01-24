@@ -61,19 +61,21 @@ function ioServer(io) {
 				if (err) {
 					console.error(err);
 				}
+
 				console.log("User: " + val + " 与服务器断开");
 				redis.del(socket.id, function (err, ret) {
 					if (err) {
 						console.error(err);
 					}
-
 				});
-				redis.del(val, function (err, ret) {
-					if (err) {
-						console.error(err);
-					}
-					_self.updateOnlieCount(false);
-				});
+				if(val) {
+					redis.del(val, function (err, ret) {
+						if (err) {
+							console.error(err);
+						}
+						_self.updateOnlieCount(false);
+					});
+				}
 			});
 		});
 
