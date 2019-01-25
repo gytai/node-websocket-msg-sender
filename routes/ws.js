@@ -28,4 +28,24 @@ router.get('/sendMsg', function(req, res, next) {
 
 });
 
+router.post('/sendMsg', function(req, res, next) {
+	var type = req.body.type || msgType.public;
+	var content = req.body.content || 'none';
+	var uid = req.body.uid;
+
+	switch (type){
+		case msgType.public:
+			ioSvc.serverBroadcastMsg(content);
+			break;
+		case msgType.private:
+			if(!uid){
+				return res.send({code:400,msg:'uid参数必传'});
+			}
+			ioSvc.serverToPrivateMsg(uid,content);
+			break;
+	}
+	return res.send({code:200,msg:'发送成功'});
+
+});
+
 module.exports = router;
