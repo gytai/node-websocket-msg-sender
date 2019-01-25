@@ -21,7 +21,7 @@ function ioServer(io) {
 	});
 
 	io.on('connection', function (socket) {
-		console.log('SocketIO有新的连接!');
+		console.log('有新的socket连接: ' + socket.id);
 		//用户与Socket进行绑定
 		socket.on('login', function (uid) {
 			console.log(uid + '登录成功');
