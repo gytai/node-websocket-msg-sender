@@ -34,7 +34,7 @@ ioSvc.serverToPrivateMsg = function (uid, data) {
     console.log("sid", sid);
     if (sid && _this.io.sockets.connected[sid]) {
       //给指定的客户端发送消息
-			console.log('_this.io.sockets.connected[sid]', _this.io.sockets.connected[sid]);
+			//console.log('_this.io.sockets.connected[sid]', _this.io.sockets.connected[sid]);
 			//console.log('_this.io.sockets', _this.io.sockets);
       //return console.log('_this.io.sockets.connected', _this.io.sockets.connected);
 			//console.log('_this.io.sockets.connected[sid]', _this.io.sockets.connected[sid]);
