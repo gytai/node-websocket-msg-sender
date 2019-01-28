@@ -56,7 +56,7 @@ function ioServer(io) {
 
 		//退出断开连接事件
 		socket.on('logout_disconnect', function () {
-			console.log("socket: " + socket.id + " 与服务器断开");
+			console.log("socket: " + socket.id + " 与服务器断开（logout_disconnect）");
 			redis.get(socket.id, function (err, val) {
 				if (err) {
 					console.error(err);
@@ -67,7 +67,7 @@ function ioServer(io) {
 					}
 				});
 				if(val) {
-					console.log("User: " + val + " 与服务器断开");
+					console.log("User: " + val + " 与服务器断开（logout_disconnect）");
 					redis.del(val, function (err, ret) {
 						if (err) {
 							console.error(err);
@@ -80,7 +80,7 @@ function ioServer(io) {
 
 		//断开事件
 		socket.on('disconnect', function () {
-			console.log("socket: " + socket.id + " 与服务器断开");
+			console.log("socket: " + socket.id + " 与服务器断开（disconnect）");
 			redis.get(socket.id, function (err, val) {
 				if (err) {
 					console.error(err);
@@ -91,7 +91,7 @@ function ioServer(io) {
 					}
 				});
 				if(val) {
-					console.log("User: " + val + " 与服务器断开");
+					console.log("User: " + val + " 与服务器断开（disconnect）");
 					redis.del(val, function (err, ret) {
 						if (err) {
 							console.error(err);
