@@ -41,6 +41,7 @@ ioSvc.serverToPrivateMsg = function (uid, data) {
 			_this.io.sockets.connected[sid].emit('message', data);
 			// _this.io.sockets.broadcast.to(sid).emit('message', data);
 			//_this.io.sockets.socket[sid].emit('message', data);
+			// _this.io.sockets.socket(sid).emit('message', data);
 		}
   });
 };
