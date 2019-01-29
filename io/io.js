@@ -7,8 +7,7 @@ var redis = require('../utils/redis');
 var msgType = require('./messageTpye');
 var ioSvc = require('./ioHelper').ioSvc;
 var request = require('request');
-var myappIP = require('../config/default_dev.json').myappIP;//本地环境
-// var myappIP = require('../config/default.json').myappIP;//生产环境
+console.log(APP);
 
 
 //服务端连接
@@ -30,7 +29,7 @@ function ioServer(io) {
 		socket.on('login', function (uid) {
 			console.log(uid + '登录成功');
 			var options = {
-				url: myappIP + '/user/send_private_todolist_msg',
+				url: APP.myappIP + '/user/send_private_todolist_msg',
 				headers: {
 					'Content-Type': 'application/json;charset=UTF-8',
 				},
