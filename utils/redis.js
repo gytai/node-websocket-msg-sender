@@ -81,20 +81,25 @@ redisSvc.isSpecialKeyExists = function (key, callback) {
  */
 redisSvc.set = function (key, value, expire, callback) {
 
-	client.set(key, value, function (err, result) {
+	if (key && String(key).indexOf("sess:undefined/") === -1) {
+		client.set(key, value, function (err, result) {
 
-		if (err) {
-			console.log(err);
-			callback(err, null);
-			return;
-		}
+			if (err) {
+				console.log(err);
+				callback(err, null);
+				return;
+			}
 
-		if (!isNaN(expire) && expire > 0) {
-			client.expire(key, parseInt(expire));
-		}
+			if (!isNaN(expire) && expire > 0) {
+				client.expire(key, parseInt(expire));
+			}
 
-		callback(null, result)
-	})
+			callback(null, result)
+		})
+	} else {
+		callback(null, "");
+	}
+
 };
 
 /**

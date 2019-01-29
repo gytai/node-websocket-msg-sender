@@ -48,4 +48,10 @@ router.post('/sendMsg', function (req, res, next) {
 
 });
 
+router.post('/logout', function (req, res, next) {
+	var socketId = req.body.socketId;
+	ioSvc.logout(socketId);
+	return res.send({code: 200, msg: '退出成功'});
+});
+
 module.exports = router;

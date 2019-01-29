@@ -6,9 +6,17 @@
 var redis = require('../utils/redis');
 var msgType = require('./messageTpye');
 var ioSvc = require('./ioHelper').ioSvc;
+var redisClient1 = require("redis").createClient();
 var request = require('request');
 console.log(APP);
 
+redisClient1.select(0, function (err, result) {
+	if (err) {
+		console.log("切换数据库db(0)失败", err);
+	} else {
+		console.log("切换数据库db(0)成功");
+	}
+});
 
 //服务端连接
 function ioServer(io) {
@@ -56,7 +64,7 @@ function ioServer(io) {
 						if (err) {
 							console.error(err);
 						}
-						_self.updateOnlieCount(true);
+						_self.updateOnlieCount();
 					});
 				} else {
 					redis.set(uid, socket.id, null, function (err, ret) {
@@ -64,6 +72,7 @@ function ioServer(io) {
 							console.error(err);
 						}
 					});
+					_self.updateOnlieCount();
 				}
 			});
 
@@ -76,24 +85,26 @@ function ioServer(io) {
 		});
 
 		//退出断开连接事件
-		socket.on('logout_disconnect', function () {
-			console.log("socket: " + socket.id + " 与服务器断开（logout_disconnect）");
-			redis.get(socket.id, function (err, val) {
+		socket.on('logout_disconnect', function (socketId) {
+			var connSocketId = socketId || socket.id;
+			console.log("socket: " + connSocketId + " 与服务器断开（logout_disconnect）");
+			redis.get(connSocketId, function (err, val) {
 				if (err) {
 					console.error(err);
 				}
-				redis.del(socket.id, function (err, ret) {
+				redis.del(connSocketId, function (err, ret) {
 					if (err) {
 						console.error(err);
 					}
 				});
+				_self.updateOnlieCount();
 				if(val) {
 					console.log("User: " + val + " 与服务器断开（logout_disconnect）");
 					redis.del(val, function (err, ret) {
 						if (err) {
 							console.error(err);
 						}
-						_self.updateOnlieCount(false);
+						//_self.updateOnlieCount(false);
 					});
 				}
 			});
@@ -113,12 +124,6 @@ function ioServer(io) {
 				});
 				if(val) {
 					console.log("User: " + val + " 与服务器断开（disconnect）");
-					redis.del(val, function (err, ret) {
-						if (err) {
-							console.error(err);
-						}
-						_self.updateOnlieCount(false);
-					});
 				}
 			});
 		});
@@ -148,7 +153,7 @@ function ioServer(io) {
 		});
 	});
 
-	this.updateOnlieCount = function (isConnect) {
+	this.updateOnlieCount0 = function (isConnect) {
 		//记录在线客户连接数
 		redis.get('online_count', function (err, val) {
 			if (err) {
@@ -167,6 +172,30 @@ function ioServer(io) {
 				if (val <= 0) {
 					val = 0;
 				}
+			}
+
+			console.log('当前在线人数：' + val);
+			io.sockets.emit('update_online_count', {online_count: val});
+
+			redis.set('online_count', val, null, function (err, ret) {
+				if (err) {
+					console.error(err);
+				}
+			});
+		});
+	};
+
+	this.updateOnlieCount = function (isConnect) {
+		//记录在线客户连接数
+		redisClient1.dbsize(function (err, val) {
+			if (err) {
+				console.error(err);
+			}
+			if (!val) {
+				val = 0;
+			}
+			if (typeof val == 'string') {
+				val = parseInt(val);
 			}
 
 			console.log('当前在线人数：' + val);
