@@ -6,6 +6,10 @@
 var redis = require('../utils/redis');
 var msgType = require('./messageTpye');
 var ioSvc = require('./ioHelper').ioSvc;
+var request = require('request');
+var myappIP = require('../config/default_dev.json').myappIP;//本地环境
+// var myappIP = require('../config/default.json').myappIP;//生产环境
+
 
 //服务端连接
 function ioServer(io) {
@@ -25,6 +29,24 @@ function ioServer(io) {
 		//用户与Socket进行绑定
 		socket.on('login', function (uid) {
 			console.log(uid + '登录成功');
+			var options = {
+				url: myappIP + '/user/send_private_todolist_msg',
+				headers: {
+					'Content-Type': 'application/json;charset=UTF-8',
+				},
+				body: JSON.stringify(
+					{
+						userId: uid
+					}
+				)
+			};
+			request.post(options, function (err, response, data) {
+				if(err) {
+					console.log("send_private_todolist_msg failure", err);
+				}
+				console.log("send_private_todolist_msg success");
+			});
+
 			redis.isSpecialKeyExists(uid, function (err, ret) {
 				if (err) {
 					console.error(err);
