@@ -25,7 +25,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 global.APP = {};//全局变量
-APP = cjson.load('./config/default.json');//生产环境
+APP = require('./config/default.json');
+// APP = cjson.load('./config/default.json');//生产环境
 // APP = cjson.load('./config/default_dev.json');//本地环境
 
 app.use('/ws', ws);
