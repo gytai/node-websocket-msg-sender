@@ -1,15 +1,12 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var cjson = require('cjson');
 
 var app = express();
 
 var ws = require('./routes/ws');
-
 
 
 // view engine setup
@@ -25,9 +22,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 global.APP = {};//全局变量
-APP = require('./config/default.json');
-// APP = cjson.load('./config/default.json');//生产环境
-// APP = cjson.load('./config/default_dev.json');//本地环境
+// APP = require('./config/default.json');//生产环境
+APP = require('./config/default_dev.json');//本地环境
 
 app.use('/ws', ws);
 
