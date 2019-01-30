@@ -55,25 +55,6 @@ function ioServer(io) {
 				console.log("send_private_todolist_msg success");
 			});
 
-			/*var options1 = {
-				url: APP.myappIP + '/user/set_socket_id_to_user_session',
-				headers: {
-					'Content-Type': 'application/json;charset=UTF-8',
-				},
-				body: JSON.stringify(
-					{
-						socketId: socket.id
-					}
-				)
-			};
-
-			request.post(options1, function (err, response, data) {
-				if(err) {
-					console.log("set_socket_id_to_user_session failure", err);
-				}
-				console.log("set_socket_id_to_user_session success");
-			});*/
-
 			redis.isSpecialKeyExists(uid, function (err, ret) {
 				if (err) {
 					console.error(err);
