@@ -216,12 +216,15 @@ function ioServer(io) {
 	};
 
 	this.updateOnlieCount = function () {
-		//记录在线客户连接数
+		//记录在线客户连接数，首先通过dbsize获取当前库的数据总数
 		redisClient1.dbsize(function (err, val) {
 			if (err) {
 				console.error(err);
 			}
 
+			//然后判断是否存在带undefined的key，如果有，则在dbsize结果的基础上减一
+			//最多存在一个带undefined的key
+			//但是有一个缺点就是如果库中存在不是以sess开头的key，则会出现统计偏差
 			redisClient1.keys(`sess:undefined/*`, (err, reply) => {
 				if(err) {
 					return console.log(err);
