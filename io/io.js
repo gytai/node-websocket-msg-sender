@@ -221,20 +221,28 @@ function ioServer(io) {
 			if (err) {
 				console.error(err);
 			}
-			if (!val) {
-				val = 0;
-			}
-			if (typeof val == 'string') {
-				val = parseInt(val);
-			}
 
-			console.log('当前在线人数：' + val);
-			io.sockets.emit('update_online_count', {online_count: val});
-
-			redis.set('online_count', val, null, function (err, ret) {
-				if (err) {
-					console.error(err);
+			redisClient1.keys(`sess:undefined/*`, (err, reply) => {
+				if(err) {
+					return console.log(err);
 				}
+				if (typeof val == 'string') {
+					val = parseInt(val);
+				}
+				if(reply.length > 0) {
+					val = val - 1;
+				}
+				if (!val) {
+					val = 0;
+				}
+				console.log('当前在线人数：' + val);
+				io.sockets.emit('update_online_count', {online_count: val});
+
+				redis.set('online_count', val, null, function (err, ret) {
+					if (err) {
+						console.error(err);
+					}
+				});
 			});
 		});
 	};
