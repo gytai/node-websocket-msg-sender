@@ -36,6 +36,7 @@ function ioServer(io) {
 		//用户与Socket进行绑定
 		socket.on('login', function (uid) {
 			console.log(uid + '登录成功');
+			socket.emit("login_success", socket.id);
 			var options = {
 				url: APP.myappIP + '/user/send_private_todolist_msg',
 				headers: {
@@ -53,6 +54,25 @@ function ioServer(io) {
 				}
 				console.log("send_private_todolist_msg success");
 			});
+
+			/*var options1 = {
+				url: APP.myappIP + '/user/set_socket_id_to_user_session',
+				headers: {
+					'Content-Type': 'application/json;charset=UTF-8',
+				},
+				body: JSON.stringify(
+					{
+						socketId: socket.id
+					}
+				)
+			};
+
+			request.post(options1, function (err, response, data) {
+				if(err) {
+					console.log("set_socket_id_to_user_session failure", err);
+				}
+				console.log("set_socket_id_to_user_session success");
+			});*/
 
 			redis.isSpecialKeyExists(uid, function (err, ret) {
 				if (err) {
@@ -72,7 +92,7 @@ function ioServer(io) {
 							console.error(err);
 						}
 					});
-					_self.updateOnlieCount();
+					//_self.updateOnlieCount();
 				}
 			});
 
@@ -81,6 +101,8 @@ function ioServer(io) {
 					console.error(err);
 				}
 			});
+
+
 
 		});
 
@@ -131,6 +153,14 @@ function ioServer(io) {
 		//重连事件
 		socket.on('reconnect', function () {
 			console.log("重新连接到服务器");
+		});
+
+		socket.on('redirect_to_login', function () {
+			console.log("重定向到登录页");
+		});
+
+		socket.on('has_same_login', function () {
+			console.log("监听到有相同的账号已登录");
 		});
 
 		//监听客户端发送的信息,实现消息转发到各个其他客户端
@@ -185,7 +215,7 @@ function ioServer(io) {
 		});
 	};
 
-	this.updateOnlieCount = function (isConnect) {
+	this.updateOnlieCount = function () {
 		//记录在线客户连接数
 		redisClient1.dbsize(function (err, val) {
 			if (err) {
