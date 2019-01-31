@@ -82,9 +82,6 @@ function ioServer(io) {
 					console.error(err);
 				}
 			});
-
-
-
 		});
 
 		//退出断开连接事件
@@ -146,8 +143,10 @@ function ioServer(io) {
 
 		//监听客户端发送的信息,实现消息转发到各个其他客户端
 		socket.on('message', function (msg) {
+			console.log("socket receive msg");
 			if (msg.type == msgType.messageType.public) {
 				socket.broadcast.emit("message", msg.content);
+				// io.sockets.emit("message", msg.content);
 			} else if (msg.type == msgType.messageType.private) {
 				var uid = msg.uid;
 				redis.get(uid, function (err, sid) {
@@ -163,38 +162,6 @@ function ioServer(io) {
 
 		});
 	});
-
-	this.updateOnlieCount0 = function (isConnect) {
-		//记录在线客户连接数
-		redis.get('online_count', function (err, val) {
-			if (err) {
-				console.error(err);
-			}
-			if (!val) {
-				val = 0;
-			}
-			if (typeof val == 'string') {
-				val = parseInt(val);
-			}
-			if (isConnect) {
-				val += 1;
-			} else {
-				val -= 1;
-				if (val <= 0) {
-					val = 0;
-				}
-			}
-
-			console.log('当前在线人数：' + val);
-			io.sockets.emit('update_online_count', {online_count: val});
-
-			redis.set('online_count', val, null, function (err, ret) {
-				if (err) {
-					console.error(err);
-				}
-			});
-		});
-	};
 
 	this.updateOnlieCount = function () {
 		//记录在线客户连接数，首先通过dbsize获取当前库的数据总数
@@ -219,6 +186,7 @@ function ioServer(io) {
 				if (!val) {
 					val = 0;
 				}
+				console.log("===========计拉取当前在线人数=============");
 				console.log('当前在线人数：' + val);
 				io.sockets.emit('update_online_count', {online_count: val});
 
