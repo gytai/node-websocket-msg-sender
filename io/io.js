@@ -137,10 +137,6 @@ function ioServer(io) {
 			console.log("重定向到登录页");
 		});
 
-		socket.on('has_same_login', function () {
-			console.log("监听到有相同的账号已登录");
-		});
-
 		//监听客户端发送的信息,实现消息转发到各个其他客户端
 		socket.on('message', function (msg) {
 			console.log("socket receive msg");
