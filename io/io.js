@@ -49,10 +49,11 @@ function ioServer(io) {
 				)
 			};
 			request.post(options, function (err, response, data) {
-				if(err) {
+				if (err) {
 					console.log("send_private_todolist_msg failure", err);
+				} else {
+					console.log("send_private_todolist_msg success");
 				}
-				console.log("send_private_todolist_msg success");
 			});
 
 			redis.isSpecialKeyExists(uid, function (err, ret) {
@@ -60,7 +61,7 @@ function ioServer(io) {
 					console.error(err);
 				}
 				//如果不存在key，则插入
-				if(ret !== 1) {
+				if (ret !== 1) {
 					redis.set(uid, socket.id, null, function (err, ret) {
 						if (err) {
 							console.error(err);
@@ -98,7 +99,7 @@ function ioServer(io) {
 					}
 				});
 				_self.updateOnlieCount();
-				if(val) {
+				if (val) {
 					console.log("User: " + val + " 与服务器断开（logout_disconnect）");
 					redis.del(val, function (err, ret) {
 						if (err) {
@@ -122,7 +123,7 @@ function ioServer(io) {
 						console.error(err);
 					}
 				});
-				if(val) {
+				if (val) {
 					console.log("User: " + val + " 与服务器断开（disconnect）");
 				}
 			});
@@ -159,7 +160,7 @@ function ioServer(io) {
 		});
 	});
 
-	this.updateOnlieCount = function () {
+	/*this.updateOnlieCount = function () {
 		//记录在线客户连接数，首先通过dbsize获取当前库的数据总数
 		redisClient1.dbsize(function (err, val) {
 			if (err) {
@@ -169,14 +170,14 @@ function ioServer(io) {
 			//然后判断是否存在带undefined的key，如果有，则在dbsize结果的基础上减一
 			//最多存在一个带undefined的key
 			//但是有一个缺点就是如果库中存在不是以sess开头的key，则会出现统计偏差
-			redisClient1.keys(`sess:undefined/*`, (err, reply) => {
-				if(err) {
+			redisClient1.keys(`sess:undefined/!*`, (err, reply) => {
+				if (err) {
 					return console.log(err);
 				}
 				if (typeof val == 'string') {
 					val = parseInt(val);
 				}
-				if(reply.length > 0) {
+				if (reply.length > 0) {
 					val = val - 1;
 				}
 				if (!val) {
@@ -191,6 +192,43 @@ function ioServer(io) {
 						console.error(err);
 					}
 				});
+			});
+		});
+	};*/
+
+	this.updateOnlieCount = function () {
+		//记录在线客户连接数，首先通过dbsize获取当前库的数据总数
+		let count = 0;
+		let userList = [];
+		redisClient1.keys("*", (err, val) => {
+			if (err) {
+				console.error(err);
+			}
+
+			if (val && val.length > 0) {
+				val.forEach((item) => {
+					let un = item.split("/")[0].split("sess:")[1];
+					if (un !== "undefined") {
+						redis.get(item, (e, v) => {
+							if (e) {
+								console.error(e);
+							} else {
+								if (v.login_user_info && v.login_user_info.id && v.login_user_info.user_name &&
+									v.login_user_info.socketId) {
+									count++;
+									userList.push(v.login_user_info.user_name);
+								}
+							}
+						})
+					}
+				})
+			}
+
+			console.log("===========拉取当前在线用户信息=============");
+			console.log('当前在线人数：' + count);
+			io.sockets.emit('update_online_count', {
+				online_count: count,
+				user_list: userList
 			});
 		});
 	};
