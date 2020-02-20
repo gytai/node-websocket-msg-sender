@@ -213,7 +213,8 @@ function ioServer(io) {
 							if (e) {
 								console.error(e);
 							} else {
-								if (v.login_user_info && v.login_user_info.id && v.login_user_info.user_name &&
+								console.log("v", v);
+								if (v && v.login_user_info && v.login_user_info.id && v.login_user_info.user_name &&
 									v.login_user_info.socketId) {
 									count++;
 									userList.push(v.login_user_info.user_name);
