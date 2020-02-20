@@ -204,33 +204,55 @@ function ioServer(io) {
 			if (err) {
 				console.error(err);
 			}
+			console.log("val", val);
+			let arr = [];
 
 			if (val && val.length > 0) {
 				val.forEach((item) => {
 					let un = item.split("/")[0].split("sess:")[1];
 					if (un !== "undefined") {
-						redis.get(item, (e, v) => {
-							if (e) {
-								console.error(e);
-							} else {
-								console.log("v", v);
-								if (v && v.login_user_info && v.login_user_info.id && v.login_user_info.user_name &&
-									v.login_user_info.socketId) {
-									count++;
-									userList.push(v.login_user_info.user_name);
-								}
-							}
-						})
+						arr.push(item);
 					}
 				})
-			}
+				if (arr.length > 0) {
+					redisClient1.mget(arr, (e, v) => {
+						if (e) {
+							console.error(e);
+						} else {
+							if (v && v.length > 0) {
+								v.forEach((item) => {
+									const i = JSON.parse(item);
+									if (i && i.login_user_info && i.login_user_info.id && i.login_user_info.user_name) {
+										count++;
+										userList.push(i.login_user_info.user_name);
+									}
+								})
+							}
 
-			console.log("===========拉取当前在线用户信息=============");
-			console.log('当前在线人数：' + count);
-			io.sockets.emit('update_online_count', {
-				online_count: count,
-				user_list: userList
-			});
+						}
+						console.log("===========拉取当前在线用户信息=============");
+						console.log('当前在线人数：' + count);
+						io.sockets.emit('update_online_count', {
+							online_count: count,
+							user_list: userList
+						});
+					})
+				} else {
+					console.log("===========拉取当前在线用户信息=============");
+					console.log('当前在线人数：' + count);
+					io.sockets.emit('update_online_count', {
+						online_count: count,
+						user_list: userList
+					});
+				}
+			} else {
+				console.log("===========拉取当前在线用户信息=============");
+				console.log('当前在线人数：' + count);
+				io.sockets.emit('update_online_count', {
+					online_count: count,
+					user_list: userList
+				});
+			}
 		});
 	};
 

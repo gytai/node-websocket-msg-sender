@@ -140,5 +140,18 @@ redisSvc.del = function (key, callback) {
 	});
 };
 
+redisSvc.mget = function (key, callback) {
+
+	client.mget(key, function (err, result) {
+
+		if (err) {
+			console.log(err);
+			callback(err, null);
+			return;
+		}
+
+		callback(null, result);
+	});
+};
 
 module.exports = redisSvc;
