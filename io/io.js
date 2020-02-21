@@ -34,6 +34,7 @@ function ioServer(io) {
 	io.on('connection', function (socket) {
 		console.log('有新的socket连接: ' + socket.id);
 		//用户与Socket进行绑定
+		//监听客户端发来的登录成功信息
 		socket.on('login', function (uid) {
 			console.log(uid + '登录成功');
 			socket.emit("login_success", socket.id);
@@ -56,7 +57,19 @@ function ioServer(io) {
 				}
 			});
 
-			redis.isSpecialKeyExists(uid, function (err, ret) {
+			redis.set(uid, socket.id, null, function (err, ret) {
+				if (err) {
+					console.error(err);
+				}
+				redis.set(socket.id, uid, null, function (err, ret) {
+					if (err) {
+						console.error(err);
+					}
+					_self.updateOnlieCount();
+				});
+			});
+
+			/*redis.isSpecialKeyExists(uid, function (err, ret) {
 				if (err) {
 					console.error(err);
 				}
@@ -66,23 +79,27 @@ function ioServer(io) {
 						if (err) {
 							console.error(err);
 						}
-						_self.updateOnlieCount();
+						redis.set(socket.id, uid, null, function (err, ret) {
+							if (err) {
+								console.error(err);
+							}
+							_self.updateOnlieCount();
+						});
 					});
 				} else {
 					redis.set(uid, socket.id, null, function (err, ret) {
 						if (err) {
 							console.error(err);
 						}
+						redis.set(socket.id, uid, null, function (err, ret) {
+							if (err) {
+								console.error(err);
+							}
+							_self.updateOnlieCount();
+						});
 					});
-					//_self.updateOnlieCount();
 				}
-			});
-
-			redis.set(socket.id, uid, null, function (err, ret) {
-				if (err) {
-					console.error(err);
-				}
-			});
+			});*/
 		});
 
 		//退出断开连接事件
@@ -213,7 +230,7 @@ function ioServer(io) {
 					if (un !== "undefined") {
 						arr.push(item);
 					}
-				})
+				});
 				if (arr.length > 0) {
 					redisClient1.mget(arr, (e, v) => {
 						if (e) {
