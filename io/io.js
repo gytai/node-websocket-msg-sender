@@ -57,6 +57,8 @@ function ioServer(io) {
 				}
 			});
 
+
+			//用户id与socket id相互绑定
 			redis.set(uid, socket.id, null, function (err, ret) {
 				if (err) {
 					console.error(err);
@@ -173,7 +175,6 @@ function ioServer(io) {
 					}
 				});
 			}
-
 		});
 	});
 
