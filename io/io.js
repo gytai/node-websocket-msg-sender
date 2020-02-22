@@ -124,7 +124,6 @@ function ioServer(io) {
 						if (err) {
 							console.error(err);
 						}
-						//_self.updateOnlieCount(false);
 					});
 				}
 			});
@@ -162,7 +161,6 @@ function ioServer(io) {
 			console.log("socket receive msg");
 			if (msg.type == msgType.messageType.public) {
 				socket.broadcast.emit("message", msg.content);
-				// io.sockets.emit("message", msg.content);
 			} else if (msg.type == msgType.messageType.private) {
 				var uid = msg.uid;
 				redis.get(uid, function (err, sid) {
@@ -273,7 +271,6 @@ function ioServer(io) {
 			}
 		});
 	};
-
 }
 
 

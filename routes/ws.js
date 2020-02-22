@@ -54,4 +54,14 @@ router.post('/redirectToLogin', function (req, res, next) {
 	return res.send({code: 200, msg: '请求成功'});
 });
 
+router.post('/deleteAccountToUpdateOnline', function (req, res, next) {
+	const {uid, userName} = req.body;
+	ioSvc.updateOnlieCount({
+		deleteFlag: true,
+		uid,
+		userName
+	});
+	return res.send({code: 200, msg: '请求成功'});
+});
+
 module.exports = router;
