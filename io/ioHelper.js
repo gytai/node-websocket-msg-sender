@@ -105,6 +105,16 @@ function updateOnlieCountFunc(self) {
 	});
 }
 
+function deleteToRedirectLogin(self, uid) {
+	redis.get(uid, (err, sid) => {
+		if (err) {
+			console.log(err);
+		} else {
+			self.redirectToLogin(sid);
+		}
+	})
+}
+
 //服务器给所有客户端广播消息
 ioSvc.serverBroadcastMsg = function (data) {
 	console.log('发送广播消息');
@@ -158,12 +168,15 @@ ioSvc.updateOnlieCount = function (params) {
 						console.log("删除该用户名对应的redis key失败");
 					} else {
 						console.log("删除该用户名对应的redis key成功");
+						// this指向ioSvc，传入
 						updateOnlieCountFunc(this);
+						deleteToRedirectLogin(this, params.uid)
 					}
 				})
 			}
 		})
 	} else {
+		// this指向ioSvc，传入
 		updateOnlieCountFunc(this);
 	}
 };
