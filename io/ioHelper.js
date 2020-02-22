@@ -11,7 +11,6 @@ redisClient1.select(0, function (err, result) {
 
 var ioSvc = {};
 ioSvc.io = null;
-var _self = this;
 
 //初始化实例
 ioSvc.setInstance = function (io) {
@@ -48,7 +47,7 @@ function fetchUserSocketIdArr() {
 	});
 }
 
-function updateOnlieCountFunc() {
+function updateOnlieCountFunc(self) {
 	let count = 0;
 	let userList = [];
 	redisClient1.keys("*", (err, val) => {
@@ -82,7 +81,7 @@ function updateOnlieCountFunc() {
 					}
 					console.log("===========拉取当前在线用户信息=============");
 					console.log('当前在线人数：' + count);
-					_self.io.sockets.emit('update_online_count', {
+					self.io.sockets.emit('update_online_count', {
 						online_count: count,
 						user_list: userList
 					});
@@ -90,7 +89,7 @@ function updateOnlieCountFunc() {
 			} else {
 				console.log("===========拉取当前在线用户信息=============");
 				console.log('当前在线人数：' + count);
-				_self.io.sockets.emit('update_online_count', {
+				self.io.sockets.emit('update_online_count', {
 					online_count: count,
 					user_list: userList
 				});
@@ -98,7 +97,7 @@ function updateOnlieCountFunc() {
 		} else {
 			console.log("===========拉取当前在线用户信息=============");
 			console.log('当前在线人数：' + count);
-			_self.io.sockets.emit('update_online_count', {
+			self.io.sockets.emit('update_online_count', {
 				online_count: count,
 				user_list: userList
 			});
@@ -159,13 +158,13 @@ ioSvc.updateOnlieCount = function (params) {
 						console.log("删除该用户名对应的redis key失败");
 					} else {
 						console.log("删除该用户名对应的redis key成功");
-						updateOnlieCountFunc();
+						updateOnlieCountFunc(this);
 					}
 				})
 			}
 		})
 	} else {
-		updateOnlieCountFunc();
+		updateOnlieCountFunc(this);
 	}
 };
 
