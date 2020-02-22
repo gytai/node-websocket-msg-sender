@@ -147,8 +147,11 @@ ioSvc.redirectToLogin = function (socketId) {
 
 ioSvc.updateOnlieCount = function (params) {
 	if (params && params.deleteFlag && params.uid && params.userName) {
+		console.log("params.userName", params.userName);
+		console.log("--->", `sess:${params.userName}/*`);
 		redisClient1.get(`sess:${params.userName}/*`, (err, res) => {
-			if (res.length > 0) {
+			console.log("res", res);
+			if (res && res.length > 0) {
 				redisClient1.del(res[0], (e, r) => {
 					if (e) {
 						console.log(e);
