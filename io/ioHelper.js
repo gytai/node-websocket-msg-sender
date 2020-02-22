@@ -157,6 +157,7 @@ ioSvc.updateOnlieCount = function (params) {
 						console.log(e);
 						console.log("删除该用户名对应的redis key失败");
 					} else {
+						console.log("删除该用户名对应的redis key成功");
 						updateOnlieCountFunc();
 					}
 				})
