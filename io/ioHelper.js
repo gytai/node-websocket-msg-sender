@@ -11,6 +11,7 @@ redisClient1.select(0, function (err, result) {
 
 var ioSvc = {};
 ioSvc.io = null;
+var _self = this;
 
 //初始化实例
 ioSvc.setInstance = function (io) {
@@ -81,7 +82,7 @@ function updateOnlieCountFunc() {
 					}
 					console.log("===========拉取当前在线用户信息=============");
 					console.log('当前在线人数：' + count);
-					this.io.sockets.emit('update_online_count', {
+					_self.io.sockets.emit('update_online_count', {
 						online_count: count,
 						user_list: userList
 					});
@@ -89,7 +90,7 @@ function updateOnlieCountFunc() {
 			} else {
 				console.log("===========拉取当前在线用户信息=============");
 				console.log('当前在线人数：' + count);
-				this.io.sockets.emit('update_online_count', {
+				_self.io.sockets.emit('update_online_count', {
 					online_count: count,
 					user_list: userList
 				});
@@ -97,7 +98,7 @@ function updateOnlieCountFunc() {
 		} else {
 			console.log("===========拉取当前在线用户信息=============");
 			console.log('当前在线人数：' + count);
-			this.io.sockets.emit('update_online_count', {
+			_self.io.sockets.emit('update_online_count', {
 				online_count: count,
 				user_list: userList
 			});
