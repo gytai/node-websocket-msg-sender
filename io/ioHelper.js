@@ -119,15 +119,15 @@ function deleteToRedirectLogin(self, uid) {
 ioSvc.serverBroadcastMsg = function (data) {
 	console.log('发送广播消息');
 	console.log(data);
-	// console.log("this.io.sockets", this.io.sockets);
-	/*fetchUserSocketIdArr().then((arr) => {
+	console.log("this.io.sockets", this.io.sockets);
+	fetchUserSocketIdArr().then((arr) => {
 		if (arr && arr.length > 0) {
 			arr.forEach((item) => {
 				this.io.sockets.connected && this.io.sockets.connected[item] && this.io.sockets.connected[item].emit('message', data);
 			});
 		}
-	});*/
-	this.io.sockets.emit('message', data);
+	});
+	// this.io.sockets.emit('message', data);
 };
 
 //服务端给指定用户发消息
