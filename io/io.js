@@ -135,12 +135,13 @@ function ioServer(io) {
 			redis.get(socket.id, function (err, val) {
 				if (err) {
 					console.error(err);
+				} else {
+					redis.del(socket.id, function (err, ret) {
+						if (err) {
+							console.error(err);
+						}
+					});
 				}
-				redis.del(socket.id, function (err, ret) {
-					if (err) {
-						console.error(err);
-					}
-				});
 				if (val) {
 					console.log("User: " + val + " 与服务器断开（disconnect）");
 				}

@@ -127,6 +127,7 @@ ioSvc.serverBroadcastMsg = function (data) {
 			});
 		}
 	});
+	// 通过以下方式广播信息，可能会出现同一个客户端，同时推送多次完全一样的信息的现象
 	// this.io.sockets.emit('message', data);
 };
 
